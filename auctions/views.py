@@ -30,6 +30,11 @@ def login_view(request):
         return render(request, "auctions/login.html")
 
 
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("index"))
+
+
 def register(request):
     if request.method == "POST":
         username = request.POST["username"]
