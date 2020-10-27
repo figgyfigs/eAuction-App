@@ -60,3 +60,20 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+
+def create(request):
+    if request.method == "POST":
+        item = Listing()
+        item.owner = User.objects.get(username=request.user)
+        item.title = request.POST["title"]
+        item.description = request.POST["description"]
+        item.starting_bid = request.POST["starting_bid"]
+        item.category = request.POST["category"]
+        item.image_url = request.POST["url"]
+        item.active = True
+        item.save()
+
+        return HttpResponseRedirect(reverse("index"))
+    else:
+        return render(request, "auctions/create_listing.html", {"categories": CATEGORIES})
