@@ -78,3 +78,23 @@ def create(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/create_listing.html", {"categories": CATEGORIES})
+
+    
+def listing(request, listing_id):
+    on_watchlist = False
+    is_owner = False
+    user = request.user
+
+    #get_listing == listing the user clicked on
+    get_listing = Listing.objects.filter(pk=listing_id)
+
+    #user who is viewing the site
+    if request.user.is_authenticated:
+        user = User.objects.get(username=request.user)
+    else:
+        user = False
+
+    return render(request, "auctions/listing.html", {
+        "listing": get_listing[0]
+    })
+
