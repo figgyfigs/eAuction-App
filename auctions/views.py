@@ -79,6 +79,18 @@ def create(request):
     else:
         return render(request, "auctions/create_listing.html", {"categories": CATEGORIES})
 
+@login_required(login_url="/login")
+def all_listings(request):
+    all_products = Listing.objects.all()
+    empty = False
+    if len(all_products) == 0:
+        empty = True
+    
+    return render(request, "auctions/all_listings.html", {
+        "all_products": all_products,
+        "empty": empty
+    })
+
     
 def listing(request, listing_id):
     on_watchlist = False
