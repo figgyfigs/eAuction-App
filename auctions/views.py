@@ -4,8 +4,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.urls import reverse
+from django import forms
 
-from .models import User
+from .static.auctions.utils import CATEGORIES
+from .models import User, Bid, Listing, Comment
 
 
 def index(request):
