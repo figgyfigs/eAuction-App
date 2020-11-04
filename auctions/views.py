@@ -11,7 +11,10 @@ from .models import User, Bid, Listing, Comment
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    active_listings = Listing.objects.all()
+    return render(request, "auctions/index.html", {
+        "listings": active_listings
+    })
 
 def login_view(request):
     if request.method == "POST":
