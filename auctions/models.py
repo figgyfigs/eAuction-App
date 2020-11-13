@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from .static.auctions.utils import CATEGORIES
+
 
 class User(AbstractUser):
     pass

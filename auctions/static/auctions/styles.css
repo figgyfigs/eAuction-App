@@ -1,3 +1,55 @@
 body {
-    padding: 10px;
+    margin: 30px;
+}
+
+h1 {
+    color: black;
+}
+
+.my-col-left {
+    padding: 100px;
+    text-align: center;
+    border-style: solid;
+    border-color: darkred;
+    border-width: 5px;
+}
+
+.my-col-right {
+    padding: 100px;
+    text-align: center;
+    text-align: left;
+    border-style: solid;
+    border-color: green;
+    border-width: 5px;
+}
+
+
+.listing-image {
+    width: 350px;
+    height: 350px;
+}
+
+.listing-title {
+    text-align: left;
+    color: darkorange;
+
+}
+
+.my-col {
+    text-align: center;
+    padding: 100px;
+}
+
+.bottom-row {
+    border-style: solid;
+    border-color: black;
+    border-width: 5px;
+}
+
+.bidding-info {
+    margin-top: 30px;
+}
+
+.form-group {
+    margin-top: 30px;
 }
