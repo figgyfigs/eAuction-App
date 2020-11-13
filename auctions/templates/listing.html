@@ -1,0 +1,62 @@
+{% extends "auctions/layout.html" %}
+
+{% load static %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <div class="row top-row">
+        <div class="col my-col-left">
+            <img class="listing-image" src="{{ listing.image_url }}" alt="No image">
+        </div>
+        <div class="col my-col-right">
+            <div class="listing-info">
+            <h1 class="listing-title">{{ listing.title }}</h1>
+            <p></p>
+            <h5><strong>Description: </strong>{{ listing.description }}</h5>
+            <h5><strong>Category: </strong>{{ listing.category }}</h5>
+            <h4><strong> Price: ${{ listing.starting_bid }}</strong></h4>
+            </div>
+        
+        {% if request.user.is_authenticated and listing.active %}
+        <div class="form-group">
+            <form auction="{% url 'listing' listing.pk %}" method="POST">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="number" name="bid" placeholder="Bid">
+                    <span class="input-group-prepend">
+                        <input class="btn btn-block-sm btn-primary" type="submit" value="Place Bid">
+                    </span>
+                </div>
+            </form>
+        {% endif %}
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                {% if message.extra_tags == 'alert-success' %}
+                <div class="alert-sm {{ message.extra_tags }}">
+                    {{ message }}
+                </div>
+                {% elif message.extra_tags == 'alert-danger' %}
+                <div class="alert {{ message.extra_tags }}">
+                    {{ message }}
+                </div>
+                {% endif %}
+                {% endfor %}
+
+        {% endif %}
+            </div>
+
+        </div> 
+        </div>
+    </div>
+
+    <div class="row bottom-row">
+        <div class="col my-col">
+            Comments
+        </div>
+    </div>
+</div>
+
+{% endblock %}
