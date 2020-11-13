@@ -2,6 +2,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.contrib.messages import get_messages
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms
@@ -15,6 +17,7 @@ def index(request):
     return render(request, "auctions/index.html", {
         "listings": active_listings
     })
+
 
 def login_view(request):
     if request.method == "POST":
@@ -96,22 +99,64 @@ def all_listings(request):
         "empty": empty
     })
 
-    
+
 def listing(request, listing_id):
     on_watchlist = False
     is_owner = False
+    winning_bid = False
     user = request.user
 
-    #get_listing == listing the user clicked on
+    #getting the listing the user clicked on
     get_listing = Listing.objects.filter(pk=listing_id)
 
     #user who is viewing the site
     if request.user.is_authenticated:
         user = User.objects.get(username=request.user)
-    else:
-        user = False
+
+        try:
+            is_owner = bool(Listing.objects.get(owner=user, pk=get_listing[0].pk))
+        except Listing.DoesNotExist:
+            is_owner = False
+        
+        if request.method == "POST":
+
+            #Bid code
+            if 'bid' in request.POST:
+                bid = int(request.POST.get('bid'))   
+                if place_bid(bid, user, get_listing) == True:
+                    #alert the user with a success message
+                    messages.add_message(request, messages.SUCCESS, 'Bid was placed Successfully!', extra_tags='alert-success')
+                    return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
+                else:
+                    messages.add_message(request, messages.ERROR, 'Bid must be higher than current ask price. Try again.', extra_tags='alert-danger')
+                    return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
+
+                if request.POST.get('bid') == "":
+                    messages.add_message(request, messages.WARNING, 'Please, place a bet.', extra_tags='alert-warning')
+                    return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
+
 
     return render(request, "auctions/listing.html", {
-        "listing": get_listing[0]
+        "listing": get_listing[0],
     })
 
+def place_bid(bid, user, listing_number):
+    get_listing = Listing.objects.get(pk=listing_number[0].pk)
+    #change starting_bid variable to a better name6
+    if bid > get_listing.starting_bid:
+        bid_contender = Bid()
+        bid_contender.user = user
+        bid_contender.bid = bid
+        bid_contender.listing = get_listing
+        bid_contender.save()
+
+        get_listing.starting_bid = bid
+        get_listing.save()
+        return True
+    else:
+        return False
+
+
+    
+
+    
