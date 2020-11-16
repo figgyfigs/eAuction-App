@@ -122,7 +122,13 @@ def listing(request, listing_id):
 
             #Bid code
             if 'bid' in request.POST:
-                bid = int(request.POST.get('bid'))   
+
+                if request.POST.get('bid') == "":
+                    messages.add_message(request, messages.WARNING, 'Please, place a bet.', extra_tags='alert-warning')
+                    return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
+
+                bid = float(request.POST.get('bid'))   
+
                 if place_bid(bid, user, get_listing) == True:
                     #alert the user with a success message
                     messages.add_message(request, messages.SUCCESS, 'Bid was placed Successfully!', extra_tags='alert-success')
@@ -130,11 +136,6 @@ def listing(request, listing_id):
                 else:
                     messages.add_message(request, messages.ERROR, 'Bid must be higher than current ask price. Try again.', extra_tags='alert-danger')
                     return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
-
-                if request.POST.get('bid') == "":
-                    messages.add_message(request, messages.WARNING, 'Please, place a bet.', extra_tags='alert-warning')
-                    return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
-
 
     return render(request, "auctions/listing.html", {
         "listing": get_listing[0]

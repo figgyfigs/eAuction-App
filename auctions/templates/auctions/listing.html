@@ -34,8 +34,13 @@
         {% if messages %}
             <div class="messages">
                 {% for message in messages %}
-                {% if message.extra_tags == 'alert-success' %}
-                <div class="alert-sm {{ message.extra_tags }}">
+
+                {% if message.extra_tags == 'alert-warning' %}
+                <div class="alert {{ message.extra_tags }}">
+                    {{ message }}
+                </div>
+                {% elif message.extra_tags == 'alert-success' %}
+                <div class="alert {{ message.extra_tags }}">
                     {{ message }}
                 </div>
                 {% elif message.extra_tags == 'alert-danger' %}

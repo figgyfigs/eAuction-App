@@ -53,3 +53,8 @@ h1 {
 .form-group {
     margin-top: 30px;
 }
+
+.alert {
+    display: inline-block;
+    margin-top: 10px;
+}
