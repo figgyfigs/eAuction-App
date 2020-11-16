@@ -137,7 +137,7 @@ def listing(request, listing_id):
 
 
     return render(request, "auctions/listing.html", {
-        "listing": get_listing[0],
+        "listing": get_listing[0]
     })
 
 def place_bid(bid, user, listing_number):

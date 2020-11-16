@@ -10,5 +10,5 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("create_listing", views.create, name="create_listing"),
     path("all_listings", views.all_listings, name="all_listings"),
-    path("listing/<int:listing_id", views.listing, name="listing"),
+    path("listing/<int:listing_id>", views.listing, name="listing"),
 ]
