@@ -24,7 +24,7 @@
                 {% csrf_token %}
                 <div class="input-group">
                     <input type="number" name="bid" placeholder="Bid">
-                    <span class="input-group-prepend">
+                    <span class="submit-bet">
                         <input class="btn btn-block-sm btn-primary" type="submit" value="Place Bid">
                     </span>
                 </div>
@@ -49,11 +49,31 @@
                 </div>
                 {% endif %}
                 {% endfor %}
-
         {% endif %}
             </div>
+            
+        {% if request.user.is_authenticated and listing.active %}
 
-        </div> 
+            {% if listing.on_watchlist  %}
+                <div class="watchlist-form">
+                    <form action="{% url 'listing' listing.pk %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-success watch-button" 
+                        type="submit" name="watchlist" value="watch">Add to Watchlist<span class="fas fa-eye"></span>
+                    </button>
+                    </form>
+            {% else %}
+                <div class="watchlist-form">
+                    <form action="{% url 'listing' listing.pk %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-danger watch-button" 
+                        type="submit" name="watchlist" value="watch">Remove from Watchlist<span class="fas fa-eye"></span>
+                    </button>
+                    </form>
+            {% endif %}
+                </div>
+        {% endif %}
+            </div>
         </div>
     </div>
 
@@ -62,6 +82,7 @@
             Comments
         </div>
     </div>
+</div>
 </div>
 
 {% endblock %}

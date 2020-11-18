@@ -127,11 +127,11 @@ def listing(request, listing_id):
                     messages.add_message(request, messages.WARNING, 'Please, place a bet.', extra_tags='alert-warning')
                     return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
 
-                bid = float(request.POST.get('bid'))   
+                bid = int(request.POST.get('bid'))   
 
                 if place_bid(bid, user, get_listing) == True:
                     #alert the user with a success message
-                    messages.add_message(request, messages.SUCCESS, 'Bid was placed Successfully!', extra_tags='alert-success')
+                    messages.add_message(request, messages.SUCCESS, 'Bid was placed successfully!', extra_tags='alert-success')
                     return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
                 else:
                     messages.add_message(request, messages.ERROR, 'Bid must be higher than current ask price. Try again.', extra_tags='alert-danger')
@@ -156,6 +156,9 @@ def place_bid(bid, user, listing_number):
         return True
     else:
         return False
+
+def watchlist(user, listing):
+    pass
 
 
     
