@@ -59,7 +59,7 @@
                     <form action="{% url 'listing' listing.pk %}" method="POST">
                     {% csrf_token %}
                     <button class="btn btn-outline-success watch-button" 
-                        type="submit" name="watchlist" value="watch">Add to Watchlist<span class="fas fa-eye"></span>
+                        type="submit" name="watch" value="watch">Add to Watchlist<span class="fas fa-eye"></span>
                     </button>
                     </form>
             {% else %}
@@ -67,7 +67,7 @@
                     <form action="{% url 'listing' listing.pk %}" method="POST">
                     {% csrf_token %}
                     <button class="btn btn-outline-danger watch-button" 
-                        type="submit" name="watchlist" value="watch">Remove from Watchlist<span class="fas fa-eye"></span>
+                        type="submit" name="watch" value="watch">Remove from Watchlist<span class="fas fa-eye"></span>
                     </button>
                     </form>
             {% endif %}

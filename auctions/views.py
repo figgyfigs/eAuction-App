@@ -9,7 +9,7 @@ from django.urls import reverse
 from django import forms
 
 from .static.auctions.utils import CATEGORIES
-from .models import User, Bid, Listing, Comment
+from .models import User, Bid, Listing, Comment, WatchList
 
 
 def index(request):
@@ -137,8 +137,17 @@ def listing(request, listing_id):
                     messages.add_message(request, messages.ERROR, 'Bid must be higher than current ask price. Try again.', extra_tags='alert-danger')
                     return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
 
+            #Checking if user clicked on the watchlist button
+            if 'watch' in request.POST:
+                watchlist(user, get_listing)
+                return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
+
+        w = WatchList.objects.filter(user=user, listing=get_listing[0])
+        on_watchlist = bool(w)
+
     return render(request, "auctions/listing.html", {
-        "listing": get_listing[0]
+        "listing": get_listing[0],
+        "on_watchlist":  on_watchlist
     })
 
 def place_bid(bid, user, listing_number):
@@ -157,10 +166,23 @@ def place_bid(bid, user, listing_number):
     else:
         return False
 
-def watchlist(user, listing):
-    pass
-
-
+def watchlist(user, listing_param):
+    #check if user is on the watchlist already
+    try:
+        watchlist_value = WatchList.objects.get(user=user)
+    except(UnboundLocalError, WatchList.DoesNotExist):
+        watchlist_value = WatchList()
+        watchlist_value.user = user
+        watchlist_value.listing = listing
+        watchlist_value.save()
     
+    w = WatchList.objects.filter(user=user, listing=listing_param[0])
+    is_watched = bool(w)
+
+    if is_watched:
+        watchlist_value.listing.remove(Listing.objects.get(pk=listing_param[0].pk))
+    else:
+        watchlist_value.listing.add(Listing.objects.get(pk=listing_param[0].pk))
+
 
     

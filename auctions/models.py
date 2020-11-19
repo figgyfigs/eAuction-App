@@ -28,5 +28,5 @@ class Comment(models.Model):
 
 class WatchList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, blank=True)
+    listing = models.ManyToManyField(Listing, blank=True)
 
