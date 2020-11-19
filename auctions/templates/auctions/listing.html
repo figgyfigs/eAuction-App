@@ -54,7 +54,7 @@
             
         {% if request.user.is_authenticated and listing.active %}
 
-            {% if listing.on_watchlist  %}
+            {% if on_watchlist == False  %}
                 <div class="watchlist-form">
                     <form action="{% url 'listing' listing.pk %}" method="POST">
                     {% csrf_token %}

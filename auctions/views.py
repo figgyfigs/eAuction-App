@@ -173,7 +173,6 @@ def watchlist(user, listing_param):
     except(UnboundLocalError, WatchList.DoesNotExist):
         watchlist_value = WatchList()
         watchlist_value.user = user
-        watchlist_value.listing = listing
         watchlist_value.save()
     
     w = WatchList.objects.filter(user=user, listing=listing_param[0])
@@ -181,8 +180,10 @@ def watchlist(user, listing_param):
 
     if is_watched:
         watchlist_value.listing.remove(Listing.objects.get(pk=listing_param[0].pk))
+        
     else:
         watchlist_value.listing.add(Listing.objects.get(pk=listing_param[0].pk))
+    
 
 
     
