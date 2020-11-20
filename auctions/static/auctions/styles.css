@@ -71,3 +71,13 @@ h1 {
     margin-left: 5px;
     color: black;
 }
+
+.form-group {
+    display: inline-block;
+    width: 50%;
+    margin-top: 40px;
+}
+
+.comment-button {
+    margin-top: 10px;
+}

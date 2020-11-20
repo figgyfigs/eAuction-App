@@ -79,7 +79,26 @@
 
     <div class="row bottom-row">
         <div class="col my-col">
-            Comments
+            <div class="form-group">
+                <form action="{% url 'listing' listing.pk %}" method="POST">
+                {% csrf_token %}
+                    <textarea  class="form-control" name="comment" id="comment-text" rows="5"></textarea>
+                    <button class="btn btn-block-sm btn-success comment-button" type="submit">Add Comment</button>
+                </form>
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+
+            {% if message.extra_tags == 'comment-error' %}
+            <div class="alert alert-warning">
+                {{ message }}
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+            </div>
         </div>
     </div>
 </div>

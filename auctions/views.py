@@ -138,9 +138,16 @@ def listing(request, listing_id):
                     return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
 
             #Checking if user clicked on the watchlist button
-            if 'watch' in request.POST:
+            elif 'watch' in request.POST:
                 watchlist(user, get_listing)
                 return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
+
+            if 'comment' in request.POST:
+                #checking if the string is empty
+                if request.POST.get('comment') == "":
+                    messages.add_message(request, messages.WARNING, "Comment content is blank.", extra_tags='comment-error')
+                    return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
+                
 
         w = WatchList.objects.filter(user=user, listing=get_listing[0])
         on_watchlist = bool(w)
@@ -183,6 +190,9 @@ def watchlist(user, listing_param):
         
     else:
         watchlist_value.listing.add(Listing.objects.get(pk=listing_param[0].pk))
+
+def add_comment(user, listing, comment):
+    pass
     
 
 
