@@ -77,6 +77,7 @@
         </div>
     </div>
 
+    <!-- bottom row -->
     <div class="row bottom-row">
         <div class="col my-col">
             <div class="form-group">
@@ -97,10 +98,24 @@
             {% endfor %}
         </div>
         {% endif %}
-
             </div>
         </div>
     </div>
+
+    <!--Comments row-->
+    <div class="row"> 
+        <div class="col">
+            <div class="comments">
+                {% for comment in comments %}
+                    <p>{{ comment.content }}</p>
+                
+                    {% empty %}
+                    <p>no comments</p>
+            </div>
+                {% endfor %}
+        </div>
+    </div>
+
 </div>
 </div>
 

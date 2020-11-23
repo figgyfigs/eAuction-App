@@ -106,8 +106,10 @@ def listing(request, listing_id):
     winning_bid = False
     user = request.user
 
-    #getting the listing the user clicked on
+    #getting the listing and comments(if any) the user clicked on
     get_listing = Listing.objects.filter(pk=listing_id)
+    comments = Comment.objects.filter(listing=get_listing[0])
+
 
     #user who is viewing the site
     if request.user.is_authenticated:
@@ -121,40 +123,47 @@ def listing(request, listing_id):
         if request.method == "POST":
 
             #Bid code
-            if 'bid' in request.POST:
+            if "bid" in request.POST:
 
-                if request.POST.get('bid') == "":
-                    messages.add_message(request, messages.WARNING, 'Please, place a bet.', extra_tags='alert-warning')
+                if request.POST.get("bid") == "":
+                    messages.add_message(request, messages.WARNING, "Please, place a bet.", extra_tags="alert-warning")
                     return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
 
-                bid = int(request.POST.get('bid'))   
+                bid = int(request.POST.get("bid"))   
 
                 if place_bid(bid, user, get_listing) == True:
                     #alert the user with a success message
-                    messages.add_message(request, messages.SUCCESS, 'Bid was placed successfully!', extra_tags='alert-success')
+                    messages.add_message(request, messages.SUCCESS, "Bid was placed successfully!", extra_tags="alert-success")
                     return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
                 else:
-                    messages.add_message(request, messages.ERROR, 'Bid must be higher than current ask price. Try again.', extra_tags='alert-danger')
+                    messages.add_message(request, messages.ERROR, "Bid must be higher than current ask price. Try again.", extra_tags="alert-danger")
                     return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
 
             #Checking if user clicked on the watchlist button
-            elif 'watch' in request.POST:
+            if "watch" in request.POST:
                 watchlist(user, get_listing)
                 return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
 
-            if 'comment' in request.POST:
+            if "comment" in request.POST:
                 #checking if the string is empty
-                if request.POST.get('comment') == "":
-                    messages.add_message(request, messages.WARNING, "Comment content is blank.", extra_tags='comment-error')
+                if request.POST.get("comment") == "":
+                    messages.add_message(request, messages.WARNING, "Comment content is blank.", extra_tags="comment-error")
                     return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
-                
+                #else:
+                    #messages.add_message(request, messages.SUCCESS, "Comment added.", extra_tags="comment-success")
+                    #return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
+            
+                comment = request.POST.get("comment")
+                manage_comment(user, get_listing, comment)
+                return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
 
         w = WatchList.objects.filter(user=user, listing=get_listing[0])
         on_watchlist = bool(w)
 
     return render(request, "auctions/listing.html", {
         "listing": get_listing[0],
-        "on_watchlist":  on_watchlist
+        "on_watchlist":  on_watchlist,
+        "comments": comments,
     })
 
 def place_bid(bid, user, listing_number):
@@ -191,9 +200,7 @@ def watchlist(user, listing_param):
     else:
         watchlist_value.listing.add(Listing.objects.get(pk=listing_param[0].pk))
 
-def add_comment(user, listing, comment):
-    pass
-    
-
-
-    
+def manage_comment(user, listing, comment):
+    # c is comment that is being saved
+    c = Comment(user=user, listing=listing[0], content=comment)
+    c.save()
