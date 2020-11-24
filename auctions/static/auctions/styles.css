@@ -81,3 +81,8 @@ h1 {
 .comment-button {
     margin-top: 10px;
 }
+
+.comment-row {
+    display: inline;
+    text-align: center;
+}

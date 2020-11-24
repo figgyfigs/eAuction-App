@@ -103,17 +103,15 @@
     </div>
 
     <!--Comments row-->
-    <div class="row"> 
-        <div class="col">
+    <div class="row comment-row"> 
             <div class="comments">
                 {% for comment in comments %}
-                    <p>{{ comment.content }}</p>
+                    <h5> <strong>{{ comment.user }}:</strong><span>{{ comment.content }}</span></h5>
                 
                     {% empty %}
                     <p>no comments</p>
             </div>
                 {% endfor %}
-        </div>
     </div>
 
 </div>
