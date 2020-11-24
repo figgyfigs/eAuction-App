@@ -99,6 +99,12 @@ def all_listings(request):
         "empty": empty
     })
 
+def watchlist(request):
+    output = "Testing if this works."
+    return render(request, "auctions/watchlist.html", {
+        "message": output
+    })
+
 
 def listing(request, listing_id):
     on_watchlist = False
@@ -125,7 +131,8 @@ def listing(request, listing_id):
             #Bid code
             if "bid" in request.POST:
 
-                if request.POST.get("bid") == "":
+                #if request.POST.get("bid") == "":
+                if request.POST["bid"] == "":
                     messages.add_message(request, messages.WARNING, "Please, place a bet.", extra_tags="alert-warning")
                     return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
 
@@ -141,7 +148,7 @@ def listing(request, listing_id):
 
             #Checking if user clicked on the watchlist button
             if "watch" in request.POST:
-                watchlist(user, get_listing)
+                manage_watchlist(user, get_listing)
                 return HttpResponseRedirect(reverse("listing", kwargs={"listing_id": listing_id}))
 
             if "comment" in request.POST:
@@ -182,7 +189,7 @@ def place_bid(bid, user, listing_number):
     else:
         return False
 
-def watchlist(user, listing_param):
+def manage_watchlist(user, listing_param):
     #check if user is on the watchlist already
     try:
         watchlist_value = WatchList.objects.get(user=user)
