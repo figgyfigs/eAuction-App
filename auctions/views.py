@@ -100,9 +100,16 @@ def all_listings(request):
     })
 
 def watchlist(request):
-    output = "Testing if this works."
+
+    #user who is currecntly logged in
+    user = request.user
+    # get all listings that this specific user has in his watchlist
+    # False if he doesnt have any listing on watchlistfi
+    watchlist = WatchList.objects.get(user=user)
+
     return render(request, "auctions/watchlist.html", {
-        "message": output
+        "user": user,
+        "watchlists": watchlist.listing.all()
     })
 
 

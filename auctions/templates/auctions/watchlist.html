@@ -1,7 +1,9 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-
-    {{ message }}
+    {% for watchlist in watchlists  %}
+        {{ user }}
+        {{ watchlist.title }}
+    {% endfor %}
 
 {% endblock %}
