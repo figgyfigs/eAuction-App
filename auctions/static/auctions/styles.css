@@ -86,3 +86,9 @@ h1 {
     display: inline;
     text-align: center;
 }
+
+.watchlist-listing {
+    display: inline-block;
+    width: 300px;
+    height: 100px;
+}
