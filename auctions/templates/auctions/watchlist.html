@@ -3,24 +3,24 @@
 {% block body %}
 
 <div class="container">
+    <h1 id="watchlist-header">
+        Your Watchlist
+    </h1>
     <div class="row">  
-        <div class="col">
+        <div class="col-1">
+
+        </div>
+        <div class="col-10">
             {% for watchlist in watchlists  %}
-            <!--
-                <div class="watchlist-listing">
-                    {{ user }}
-                    {{ watchlist.title }}
-                </div>
-            -->
             <div class="card">
-                <a href="{% url 'listing' watchlist.pk %}" class="btn">
-    
+                <a href="{% url 'listing' watchlist.pk %}" class="btn">    
                 <h4 class="card-title">{{ watchlist.title }} </h4>
-    
-                <h6 class="card-description"><strong>Description: </strong>{{ watchlist.description }} </h6>
                 <img class="card-image" src="{{ watchlist.image_url }}" alt="No image" style="height: 250px;">
-            {% endfor %}
             </div>
+            {% endfor %}
+        </div>
+        <div class="col-1">
+
         </div>
     </div>
 </div>

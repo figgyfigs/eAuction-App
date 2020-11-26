@@ -92,3 +92,8 @@ h1 {
     width: 300px;
     height: 100px;
 }
+
+#watchlist-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
