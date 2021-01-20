@@ -14,8 +14,14 @@ from .models import User, Bid, Listing, Comment, WatchList
 
 def index(request):
     active_listings = Listing.objects.all()
+    try:
+      user_watchlist = WatchList.objects.filter(user=request.user.username)
+      watchlist_count = len(user_watchlist)
+    except:
+      watchlist_count = None
     return render(request, "auctions/index.html", {
-        "listings": active_listings
+        "listings": active_listings,
+        "watchlist_count": watchlist_count
     })
 
 
@@ -100,13 +106,11 @@ def all_listings(request):
     })
 
 def watchlist(request):
-
     #user who is currecntly logged in
     user = request.user
+
     # get all listings that this specific user has in his watchlist
     # False if he doesnt have any listing on watchlistfi
-    watchlist = WatchList.objects.get(user=user)
-
     return render(request, "auctions/watchlist.html", {
         "user": user,
         "watchlists": watchlist.listing.all()
