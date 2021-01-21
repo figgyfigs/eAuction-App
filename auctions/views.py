@@ -7,6 +7,7 @@ from django.contrib.messages import get_messages
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms
+from datetime import date, time, datetime
 
 from .static.auctions.utils import CATEGORIES
 from .models import User, Bid, Listing, Comment, WatchList
@@ -14,11 +15,10 @@ from .models import User, Bid, Listing, Comment, WatchList
 
 def index(request):
     active_listings = Listing.objects.all()
-    try:
-      user_watchlist = WatchList.objects.filter(user=request.user.username)
-      watchlist_count = len(user_watchlist)
-    except:
-      watchlist_count = None
+    
+    user_watchlist = WatchList.objects.filter(user=request.user)
+    watchlist_count = len(user_watchlist)
+
     return render(request, "auctions/index.html", {
         "listings": active_listings,
         "watchlist_count": watchlist_count
@@ -108,9 +108,10 @@ def all_listings(request):
 def watchlist(request):
     #user who is currecntly logged in
     user = request.user
-
     # get all listings that this specific user has in his watchlist
-    # False if he doesnt have any listing on watchlistfi
+    # False if he doesnt have any listing on watchlist
+    watchlist = WatchList.objects.get(user=user)
+
     return render(request, "auctions/watchlist.html", {
         "user": user,
         "watchlists": watchlist.listing.all()
@@ -182,6 +183,7 @@ def listing(request, listing_id):
         "listing": get_listing[0],
         "on_watchlist":  on_watchlist,
         "comments": comments,
+        "date": time()
     })
 
 def place_bid(bid, user, listing_number):
@@ -222,3 +224,7 @@ def manage_comment(user, listing, comment):
     # c is comment that is being saved
     c = Comment(user=user, listing=listing[0], content=comment)
     c.save()
+
+def time():
+  now = datetime.now()
+  return now

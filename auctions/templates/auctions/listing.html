@@ -16,6 +16,7 @@
             <h5><strong>Description: </strong>{{ listing.description }}</h5>
             <h5><strong>Category: </strong>{{ listing.category }}</h5>
             <h4><strong> Price: ${{ listing.starting_bid }}</strong></h4>
+            <h3>Current date: {{ date }}</h3>
             </div>
         
         {% if request.user.is_authenticated and listing.active %}
