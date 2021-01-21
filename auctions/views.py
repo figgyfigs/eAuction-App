@@ -228,3 +228,8 @@ def manage_comment(user, listing, comment):
 def time():
   now = datetime.now()
   return now
+
+def add_variable_to_context(request):
+  return {
+    "test": 5
+  }
